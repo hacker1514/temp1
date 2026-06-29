@@ -2,36 +2,21 @@
 
 const BASE = '';
 
-async function getApiKey() {
-    const token = localStorage.getItem("token"); // Assuming you store your JWT here
-    
-    try {
-        const response = await fetch('/api/settings/key', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch API key');
-        }
-
-        const data = await response.json();
-        const apiKey = data.key;
-        console.log("API Key retrieved successfully:", apiKey);
-        return apiKey;
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
 function getToken() { return localStorage.getItem('kni_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('kni_user') || 'null'); } catch { return null; } }
 function setAuth(token, user) { localStorage.setItem('kni_token', token); localStorage.setItem('kni_user', JSON.stringify(user)); }
 function clearAuth()          { localStorage.removeItem('kni_token'); localStorage.removeItem('kni_user'); }
-function getGroqKey()         {  return getApiKey() || ''; }
+
+// Updated: Fetches the API key from the backend securely
+async function getGroqKey() {
+  try {
+    const res = await api.get('/api/config/key');
+    return res.key;
+  } catch (error) {
+    console.error("Could not retrieve API key", error);
+    return '';
+  }
+}
 
 async function apiFetch(method, path, body = null, isForm = false) {
   const token = getToken();
@@ -80,6 +65,9 @@ const api = {
     }
   }
 };
+
+/* ── Toast, Helpers, Loading, Redirect, and Nav functions remain unchanged below ── */
+/* (Keep the rest of your original api.js code here) */
 
 /* ── Toast ─────────────────────────────────────────── */
 function toast(msg, type = 'info') {
