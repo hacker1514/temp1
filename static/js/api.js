@@ -6,17 +6,7 @@ function getToken() { return localStorage.getItem('kni_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('kni_user') || 'null'); } catch { return null; } }
 function setAuth(token, user) { localStorage.setItem('kni_token', token); localStorage.setItem('kni_user', JSON.stringify(user)); }
 function clearAuth()          { localStorage.removeItem('kni_token'); localStorage.removeItem('kni_user'); }
-
-// Updated: Fetches the API key from the backend securely
-async function getGroqKey() {
-  try {
-    const res = await api.get('/api/config/key');
-    return res.key;
-  } catch (error) {
-    console.error("Could not retrieve API key", error);
-    return '';
-  }
-}
+function getGroqKey()         { return 'API' || ''; }
 
 async function apiFetch(method, path, body = null, isForm = false) {
   const token = getToken();
@@ -65,9 +55,6 @@ const api = {
     }
   }
 };
-
-/* ── Toast, Helpers, Loading, Redirect, and Nav functions remain unchanged below ── */
-/* (Keep the rest of your original api.js code here) */
 
 /* ── Toast ─────────────────────────────────────────── */
 function toast(msg, type = 'info') {
