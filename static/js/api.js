@@ -3,9 +3,28 @@
 const BASE = '';
 
 async function getApiKey() {
-  const res = await fetch("https://kni-org.up.railway.app/api/key");
-  const data = await res.json();
-  return data.key;
+    const token = localStorage.getItem("token"); // Assuming you store your JWT here
+    
+    try {
+        const response = await fetch('/api/settings/key', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch API key');
+        }
+
+        const data = await response.json();
+        const apiKey = data.key;
+        console.log("API Key retrieved successfully:", apiKey);
+        return apiKey;
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 function getToken() { return localStorage.getItem('kni_token'); }
