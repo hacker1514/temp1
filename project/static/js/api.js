@@ -1,4 +1,5 @@
 /* KNI Platform — API Client */
+const api = process.env.api;
 
 const BASE = '';
 
@@ -6,7 +7,7 @@ function getToken() { return localStorage.getItem('kni_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('kni_user') || 'null'); } catch { return null; } }
 function setAuth(token, user) { localStorage.setItem('kni_token', token); localStorage.setItem('kni_user', JSON.stringify(user)); }
 function clearAuth()          { localStorage.removeItem('kni_token'); localStorage.removeItem('kni_user'); }
-function getGroqKey()         { return 'add api key here' || ''; }
+function getGroqKey()         { return api || ''; }
 
 async function apiFetch(method, path, body = null, isForm = false) {
   const token = getToken();
