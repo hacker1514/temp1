@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔰𝙽𝙸𝚁𝙰𝙽𝙹𝙰𝙽 𝙲𝚁𝙴𝙰𝚃𝙸𝙾𝙽𝚂🔰</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="bg-anim"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="KNI" onerror="this.style.display='none'"><span>𝙾𝚁𝙶𝙰𝙽𝙸𝚉𝙰𝚃𝙸𝙾𝙽</span></a>
+  <div class="nav-links">
+    <a href="/dashboard.html" class="active">𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+    <a href="/create.html">+ 𝙲𝚛𝚎𝚊𝚝𝚎</a>
+    <a href="/browse.html">𝙱𝚛𝚘𝚠𝚜𝚎</a>
+  </div>
+  <div class="nav-actions">
+    <div id="nav-guest" class="hidden"><a href="/login.html" class="btn btn-ghost btn-sm">𝙻𝚘𝚐𝚒𝚗</a></div>
+    <div id="nav-auth" class="hidden dropdown-menu">
+      <div class="avatar-sm" id="nav-avatar">?</div>
+      <div class="dropdown-content">
+        <a href="/dashboard.html">🏠 𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+        <a href="/profile.html?user=" id="nav-profile-link">👤 𝙼𝚢 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</a>
+        <a href="/settings.html">⚙️ 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+        <hr>
+        <a href="#" onclick="logout()">🚪 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">𝙽𝚊𝚟𝚒𝚐𝚊𝚝𝚒𝚘𝚗</div>
+    <a href="/dashboard.html" class="active"><span class="icon">🏠</span> 𝙼𝚢 𝙿𝚛𝚘𝚓𝚎𝚌𝚝𝚜</a>
+    <a href="/create.html"><span class="icon">➕</span> 𝙲𝚛𝚎𝚊𝚝𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</a>
+    <a href="/browse.html"><span class="icon">🔍</span> 𝙱𝚛𝚘𝚠𝚜𝚎 𝙿𝚞𝚋𝚕𝚒𝚌</a>
+    <div class="sidebar-label">𝙰𝚌𝚌𝚘𝚞𝚗𝚝</div>
+    <a href="/profile.html?user=" id="sidebar-profile"><span class="icon">👤</span> 𝙼𝚢 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</a>
+    <a href="/settings.html"><span class="icon">⚙️</span> 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+    <a href="#" onclick="logout()"><span class="icon">🚪</span> 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header flex justify-between items-center">
+      <div>
+        <div class="page-title">𝙼𝚢 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜</div>
+        <div class="page-sub" id="welcome-msg">𝙻𝚘𝚊𝚍𝚒𝚗𝚐...</div>
+      </div>
+      <a href="/create.html" class="btn btn-primary">➕ 𝙽𝚎𝚠 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</a>
+    </div>
+
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card"><div class="stat-icon orange">📁</div><div><div class="stat-value" id="stat-total">–</div><div class="stat-label">𝚃𝚘𝚝𝚊𝚕 𝙿𝚛𝚘𝚓𝚎𝚌𝚝𝚜</div></div></div>
+      <div class="stat-card"><div class="stat-icon green">🌍</div><div><div class="stat-value" id="stat-pub">–</div><div class="stat-label">𝙿𝚞𝚋𝚕𝚒𝚜𝚑𝚎𝚍</div></div></div>
+      <div class="stat-card"><div class="stat-icon blue">📦</div><div><div class="stat-value" id="stat-dl">–</div><div class="stat-label">𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍𝚜</div></div></div>
+      <div class="stat-card"><div class="stat-icon purple">❤️</div><div><div class="stat-value" id="stat-likes">–</div><div class="stat-label">𝚃𝚘𝚝𝚊𝚕 𝙻𝚒𝚔𝚎𝚜</div></div></div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">𝙰𝚕𝚕 𝙿𝚛𝚘𝚓𝚎𝚌𝚝𝚜</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" class="form-input" placeholder="𝚂𝚎𝚊𝚛𝚌𝚑..." id="searchInput" style="width:200px;padding:7px 12px;font-size:.82rem;">
+        <select class="form-select" id="filterSelect" style="width:140px;padding:7px 12px;font-size:.82rem;">
+          <option value="all">𝙰𝚕𝚕</option>
+          <option value="published">𝙿𝚞𝚋𝚕𝚒𝚜𝚑𝚎𝚍</option>
+          <option value="draft">𝙳𝚛𝚊𝚏𝚝𝚜</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="projects-container">
+      <div class="empty"><div class="empty-icon">⏳</div><h3>𝙻𝚘𝚊𝚍𝚒𝚗𝚐...</h3></div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">𝙳𝚎𝚕𝚎𝚝𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</div>
+      <span class="modal-close" onclick="document.getElementById('deleteModal').classList.remove('show')">✕</span>
+    </div>
+    <p style="color:var(--txt2);margin-bottom:20px;">𝚃𝚑𝚒𝚜 𝚠𝚒𝚕𝚕 𝚙𝚎𝚛𝚖𝚊𝚗𝚎𝚗𝚝𝚕𝚢 𝚍𝚎𝚕𝚎𝚝𝚎 𝚝𝚑𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚊𝚗𝚍 𝚊𝚕𝚕 𝚒𝚝𝚜 𝚏𝚒𝚕𝚎𝚜 𝚏𝚛𝚘𝚖 𝚝𝚑𝚎 𝚜𝚎𝚛𝚟𝚎𝚛. 𝚃𝚑𝚒𝚜 𝚌𝚊𝚗𝚗𝚘𝚝 𝚋𝚎 𝚞𝚗𝚍𝚘𝚗𝚎.</p>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-danger w-full" id="confirmDeleteBtn">🗑️ 𝙳𝚎𝚕𝚎𝚝𝚎 𝙵𝚘𝚛𝚎𝚟𝚎𝚛</button>
+      <button class="btn btn-secondary w-full" onclick="document.getElementById('deleteModal').classList.remove('show')">𝙲𝚊𝚗𝚌𝚎𝚕</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+if (!requireAuth()) throw new Error('redirect');
+
+let allProjects = [];
+let deleteId = null;
+
+async function loadDashboard() {
+  const user = getUser();
+  document.getElementById('welcome-msg').textContent = `𝚆𝚎𝚕𝚌𝚘𝚖𝚎 𝚋𝚊𝚌𝚔, ${user?.username || 'developer'} 👋`;
+  const link = document.getElementById('nav-profile-link');
+  const slink = document.getElementById('sidebar-profile');
+  if (link) link.href = `/profile.html?user=${user?.username}`;
+  if (slink) slink.href = `/profile.html?user=${user?.username}`;
+  try {
+    allProjects = await api.get('/api/projects');
+    updateStats();
+    renderProjects(allProjects);
+  } catch(e) {
+    toast(e.message, 'error');
+  }
+}
+
+function updateStats() {
+  const pub = allProjects.filter(p => p.is_published);
+  const dl = allProjects.reduce((a,p) => a + (p.downloads||0), 0);
+  const lk = allProjects.reduce((a,p) => a + (p.likes_count||0), 0);
+  document.getElementById('stat-total').textContent = allProjects.length;
+  document.getElementById('stat-pub').textContent = pub.length;
+  document.getElementById('stat-dl').textContent = fmtNum(dl);
+  document.getElementById('stat-likes').textContent = fmtNum(lk);
+}
+
+function renderProjects(projects) {
+  const container = document.getElementById('projects-container');
+  if (!projects.length) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><h3>𝙽𝚘 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜 𝚢𝚎𝚝</h3><p>𝙲𝚛𝚎𝚊𝚝𝚎 𝚢𝚘𝚞𝚛 𝚏𝚒𝚛𝚜𝚝 𝙰𝙸-𝚙𝚘𝚠𝚎𝚛𝚎𝚍 𝙱𝚛𝚘𝚠𝚜𝚎𝚛 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗!</p><br><a href="/create.html" class="btn btn-primary">➕ 𝙲𝚛𝚎𝚊𝚝𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</a></div>`;
+    return;
+  }
+  container.innerHTML = `<div class="project-grid">${projects.map(p => `
+    <div class="project-card" onclick="window.location.href='/project.html?id=${p.id}&mine=1'">
+      <div class="project-card-icon">${p.icon_filename ? `<img src="/ext-icon/${p.user_id}/${p.folder_name}/${p.icon_filename}" style="width:100%;height:100%;border-radius:10px;object-fit:cover;" onerror="this.parentElement.innerHTML='🧩'">` : '🧩'}</div>
+      <div class="project-card-name">${escHtml(p.name)}</div>
+      <div class="project-card-desc">${escHtml(p.description || '𝙽𝚘 𝚍𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗')}</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <span class="badge ${p.is_published ? 'badge-green' : 'badge-gray'}">${p.is_published ? '🌍 𝙿𝚞𝚋𝚕𝚒𝚜𝚑𝚎𝚍' : '📝 𝙳𝚛𝚊𝚏𝚝'}</span>
+        <span class="badge badge-orange">𝚟${escHtml(p.version)}</span>
+        ${p.tags ? p.tags.split(',').slice(0,2).map(t => `<span class="badge badge-blue">${escHtml(t.trim())}</span>`).join('') : ''}
+      </div>
+      <div class="project-card-meta">
+        <div class="project-card-stats">
+          <span class="stat-item">📦 ${fmtNum(p.downloads)}</span>
+          <span class="stat-item">❤️ ${fmtNum(p.likes_count)}</span>
+          <span class="stat-item">👁️ ${fmtNum(p.views)}</span>
+        </div>
+        <span style="color:var(--txt3);font-size:.75rem;">${timeAgo(p.updated_at)}</span>
+      </div>
+      <div class="project-card-actions" onclick="event.stopPropagation()">
+        <a href="/create.html?id=${p.id}" class="btn btn-secondary btn-sm">✏️ 𝙴𝚍𝚒𝚝</a>
+        <button class="btn btn-ghost btn-sm" onclick="togglePublish(${p.id},${p.is_published})" id="pub-btn-${p.id}">${p.is_published ? '🔒 𝚄𝚗𝚙𝚞𝚋𝚕𝚒𝚜𝚑' : '🌍 𝙿𝚞𝚋𝚕𝚒𝚜𝚑'}</button>
+        <button class="btn btn-ghost btn-sm" title="Download Folder" onclick='downloadProject(${p.id}, ${JSON.stringify(p.folder_name)})'>📁</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${p.id})">🗑️</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function togglePublish(id, isPublished) {
+  try {
+    if (isPublished) {
+      await api.post(`/api/projects/${id}/unpublish`);
+      toast('Extension unpublished', 'info');
+    } else {
+      await api.post(`/api/projects/${id}/publish`);
+      toast('Extension published!', 'success');
+    }
+    allProjects = await api.get('/api/projects');
+    updateStats();
+    filterProjects();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+function confirmDelete(id) {
+  deleteId = id;
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+async function downloadProject(id, folderName) {
+  try {
+    await api.download(`/api/projects/${id}/download`, folderName || 'extension');
+    toast('𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚜𝚝𝚊𝚛𝚝𝚎𝚍!', 'success');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast(e.message, 'error');
+  }
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+  if (!deleteId) return;
+  const btn = document.getElementById('confirmDeleteBtn');
+  showLoading(btn, 'Deleting...');
+  try {
+    await api.del(`/api/projects/${deleteId}`);
+    document.getElementById('deleteModal').classList.remove('show');
+    toast('Extension deleted', 'success');
+    allProjects = await api.get('/api/projects');
+    updateStats();
+    filterProjects();
+  } catch(e) { toast(e.message, 'error'); hideLoading(btn); }
+});
+
+function filterProjects() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filter = document.getElementById('filterSelect').value;
+  let p = allProjects;
+  if (filter === 'published') p = p.filter(x => x.is_published);
+  if (filter === 'draft') p = p.filter(x => !x.is_published);
+  if (search) p = p.filter(x => x.name.toLowerCase().includes(search) || (x.description||'').toLowerCase().includes(search) || (x.tags||'').toLowerCase().includes(search));
+  renderProjects(p);
+}
+
+document.getElementById('searchInput').addEventListener('input', filterProjects);
+document.getElementById('filterSelect').addEventListener('change', filterProjects);
+document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+</body>
+</html>

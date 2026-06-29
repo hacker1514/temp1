@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔰𝙽𝙸𝚁𝙰𝙽𝙹𝙰𝙽 𝙲𝚁𝙴𝙰𝚃𝙸𝙾𝙽𝚂🔰</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="bg-anim"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div id="toast-container"></div>
+<nav class="navbar">
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="KNI" onerror="this.style.display='none'"><span>𝙾𝚁𝙶𝙰𝙽𝙸𝚉𝙰𝚃𝙸𝙾𝙽</span></a>
+  <div class="nav-links">
+    <a href="/dashboard.html">𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+    <a href="/create.html">+ 𝙲𝚛𝚎𝚊𝚝𝚎</a>
+    <a href="/browse.html" class="active">𝙱𝚛𝚘𝚠𝚜𝚎</a>
+  </div>
+  <div class="nav-actions">
+    <div id="nav-guest"><a href="/login.html" class="btn btn-ghost btn-sm">𝙻𝚘𝚐𝚒𝚗</a>&nbsp;<a href="/register.html" class="btn btn-primary btn-sm">𝚁𝚎𝚐𝚒𝚜𝚝𝚎𝚛</a></div>
+    <div id="nav-auth" class="hidden dropdown-menu">
+      <div class="avatar-sm" id="nav-avatar">?</div>
+      <div class="dropdown-content">
+        <a href="/dashboard.html">🏠 𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+        <a href="/settings.html">⚙️ 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+        <hr><a href="#" onclick="logout()">🚪 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<main style="max-width:1200px;margin:0 auto;padding:32px 20px;">
+  <div class="page-header">
+    <div class="page-title">🔍 𝙱𝚛𝚘𝚠𝚜𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜</div>
+    <div class="page-sub">𝙳𝚒𝚜𝚌𝚘𝚟𝚎𝚛 𝚊𝚗𝚍 𝚍𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚌𝚘𝚖𝚖𝚞𝚗𝚒𝚝𝚢-𝚋𝚞𝚒𝚕𝚝 𝙱𝚛𝚘𝚠𝚜𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜</div>
+  </div>
+  <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+    <div class="search-bar" style="flex:1;min-width:220px;">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="𝚂𝚎𝚊𝚛𝚌𝚑 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜..." oninput="onSearch()">
+      <button class="btn btn-primary btn-sm" onclick="doSearch()">𝚂𝚎𝚊𝚛𝚌𝚑</button>
+    </div>
+    <select class="form-select" id="sortSelect" onchange="doSearch()" style="width:160px;padding:10px 14px;">
+      <option value="recent">🕐 𝙼𝚘𝚜𝚝 𝚁𝚎𝚌𝚎𝚗𝚝</option>
+      <option value="popular">📦 𝙼𝚘𝚜𝚝 𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍𝚎𝚍</option>
+      <option value="liked">❤️ 𝙼𝚘𝚜𝚝 𝙻𝚒𝚔𝚎𝚍</option>
+      <option value="views">👁️ 𝙼𝚘𝚜𝚝 𝚅𝚒𝚎𝚠𝚎𝚍</option>
+    </select>
+    <input type="text" id="tagFilter" class="form-input" placeholder="𝙵𝚒𝚕𝚝𝚎𝚛 𝚋𝚢 𝚝𝚊𝚐..." oninput="doSearch()" style="width:160px;">
+  </div>
+  <div id="popular-tags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"></div>
+  <div id="results-info" style="color:var(--txt2);font-size:.875rem;margin-bottom:16px;"></div>
+  <div id="projects-grid">
+    <div class="empty"><div class="empty-icon">⏳</div><h3>𝙻𝚘𝚊𝚍𝚒𝚗𝚐 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜...</h3></div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</main>
+<script src="/js/api.js"></script>
+<script>
+let currentPage = 1;
+let searchTimeout = null;
+function onSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(doSearch, 400);
+}
+async function doSearch(page = 1) {
+  currentPage = page;
+  const search = document.getElementById('searchInput').value.trim();
+  const sort = document.getElementById('sortSelect').value;
+  const tag = document.getElementById('tagFilter').value.trim();
+  const params = new URLSearchParams({ search, sort, tag, page, limit: 12 });
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = `<div class="empty"><div class="empty-icon">⏳</div><h3>𝙻𝚘𝚊𝚍𝚒𝚗𝚐...</h3></div>`;
+  try {
+    const res = await api.get(`/api/public/projects?${params}`);
+    document.getElementById('results-info').textContent = `${res.total} 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗${res.total!==1?'𝚜':''} 𝚏𝚘𝚞𝚗𝚍`;
+    renderGrid(res.projects);
+    renderPagination(res.page, res.pages);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h3>𝙴𝚛𝚛𝚘𝚛 𝚕𝚘𝚊𝚍𝚒𝚗𝚐 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜</h3><p>${e.message}</p></div>`;
+  }
+}
+function renderGrid(projects) {
+  const grid = document.getElementById('projects-grid');
+  if (!projects.length) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><h3>𝙽𝚘 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗𝚜 𝚏𝚘𝚞𝚗𝚍</h3><p>𝚃𝚛𝚢 𝚊 𝚍𝚒𝚏𝚏𝚎𝚛𝚎𝚗𝚝 𝚜𝚎𝚊𝚛𝚌𝚑 𝚝𝚎𝚛𝚖 𝚘𝚛 𝚋𝚎 𝚝𝚑𝚎 𝚏𝚒𝚛𝚜𝚝 𝚝𝚘 𝚙𝚞𝚋𝚕𝚒𝚜𝚑!</p><br><a href="/register.html" class="btn btn-primary">𝚂𝚝𝚊𝚛𝚝 𝙱𝚞𝚒𝚕𝚍𝚒𝚗𝚐</a></div>`;
+    return;
+  }
+  grid.innerHTML = `<div class="project-grid">${projects.map(p => `
+    <div class="project-card" onclick="window.location.href='/project.html?id=${p.id}'">
+      <div class="project-card-icon">${p.icon_filename ? `<img src="/ext-icon/${p.user_id}/${p.folder_name}/${p.icon_filename}" style="width:100%;height:100%;border-radius:10px;object-fit:cover;" onerror="this.parentElement.innerHTML='🧩'">` : '🧩'}</div>
+      <div class="project-card-name">${escHtml(p.name)}</div>
+      <div class="project-card-desc">${escHtml(p.description||'𝙽𝚘 𝚍𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗 𝚙𝚛𝚘𝚟𝚒𝚍𝚎𝚍.')}</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <span class="badge badge-orange">𝚟${escHtml(p.version)}</span>
+        ${p.tags ? p.tags.split(',').slice(0,3).map(t=>`<span class="badge badge-blue" onclick="event.stopPropagation();setTag('${escHtml(t.trim())}')">${escHtml(t.trim())}</span>`).join(''):''}
+      </div>
+      <div class="project-card-meta">
+        <div class="project-card-stats">
+          <span class="stat-item">📦 ${fmtNum(p.downloads)}</span>
+          <span class="stat-item">❤️ ${fmtNum(p.likes_count)}</span>
+          <span class="stat-item">👁️ ${fmtNum(p.views)}</span>
+        </div>
+        <a href="/profile.html?user=${escHtml(p.username)}" onclick="event.stopPropagation()" style="color:var(--orange);font-size:.75rem;text-decoration:none;">@${escHtml(p.username)}</a>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function renderPagination(page, pages) {
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  let html = '';
+  if (page > 1) html += `<div class="page-btn" onclick="doSearch(${page-1})">‹</div>`;
+  for (let i = Math.max(1,page-2); i <= Math.min(pages,page+2); i++) {
+    html += `<div class="page-btn ${i===page?'active':''}" onclick="doSearch(${i})">${i}</div>`;
+  }
+  if (page < pages) html += `<div class="page-btn" onclick="doSearch(${page+1})">›</div>`;
+  el.innerHTML = html;
+}
+function setTag(tag) {
+  document.getElementById('tagFilter').value = tag;
+  doSearch();
+}
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+const POPULAR_TAGS = ['productivity','dark-mode','tab-manager','youtube','gmail','developer','automation','privacy','download','bookmark'];
+document.getElementById('popular-tags').innerHTML = POPULAR_TAGS.map(t =>
+  `<span class="tag" onclick="setTag('${t}')"># ${t}</span>`).join('');
+document.addEventListener('DOMContentLoaded', () => doSearch());
+document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+</script>
+</body>
+</html>

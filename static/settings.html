@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔰𝙽𝙸𝚁𝙰𝙽𝙹𝙰𝙽 𝙲𝚁𝙴𝙰𝚃𝙸𝙾𝙽𝚂🔰</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="bg-anim"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="KNI" onerror="this.style.display='none'"><span>𝙾𝚁𝙶𝙰𝙽𝙸𝚉𝙰𝚃𝙸𝙾𝙽</span></a>
+  <div class="nav-links">
+    <a href="/dashboard.html">𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+    <a href="/browse.html">𝙱𝚛𝚘𝚠𝚜𝚎𝚛</a>
+  </div>
+  <div class="nav-actions">
+    <div id="nav-guest" class="hidden"><a href="/login.html" class="btn btn-ghost btn-sm">𝙻𝚘𝚐𝚒𝚗</a></div>
+    <div id="nav-auth" class="hidden dropdown-menu">
+      <div class="avatar-sm" id="nav-avatar">?</div>
+      <div class="dropdown-content">
+        <a href="/dashboard.html">🏠 𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+        <a href="/settings.html" class="active">⚙️ 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+        <hr><a href="#" onclick="logout()">🚪 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">𝙽𝚊𝚟𝚒𝚐𝚊𝚝𝚒𝚘𝚗</div>
+    <a href="/dashboard.html"><span class="icon">🏠</span> 𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+    <a href="/create.html"><span class="icon">➕</span> 𝙲𝚛𝚎𝚊𝚝𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</a>
+    <a href="/browse.html"><span class="icon">🔍</span> 𝙱𝚛𝚘𝚠𝚜𝚎𝚛 𝙿𝚞𝚋𝚕𝚒𝚌</a>
+    <div class="sidebar-label">𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</div>
+    <a href="/settings.html" class="active"><span class="icon">⚙️</span> 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+    <a href="#" onclick="logout()"><span class="icon">🚪</span> 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+  </aside>
+
+  <main class="main-content" style="max-width:640px;">
+    <div class="page-header">
+      <div class="page-title">⚙️ 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</div>
+      <div class="page-sub">𝙼𝚊𝚗𝚊𝚐𝚎 𝚢𝚘𝚞𝚛 𝚊𝚌𝚌𝚘𝚞𝚗𝚝 𝚙𝚛𝚎𝚏𝚎𝚛𝚎𝚗𝚌𝚎𝚜 </div>
+    </div>
+
+    <div class="card mb-6">
+      <div class="card-title">👤 𝙰𝚌𝚌𝚘𝚞𝚗𝚝 𝙸𝚗𝚏𝚘</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+        <div class="avatar-lg" id="settings-avatar" style="width:60px;height:60px;font-size:1.4rem;">?</div>
+        <div>
+          <div style="font-weight:700;font-size:1.1rem;" id="s-username">𝙻𝚘𝚊𝚍𝚒𝚗𝚐...</div>
+          <div style="color:var(--txt2);font-size:.875rem;" id="s-email">...</div>
+          <div style="color:var(--txt3);font-size:.78rem;margin-top:2px;">𝙹𝚘𝚒𝚗𝚎𝚍 <span id="s-joined">...</span></div>
+        </div>
+      </div>
+      <a id="my-profile-link" href="#" class="btn btn-ghost btn-sm">👤 𝚅𝚒𝚎𝚠 𝙿𝚞𝚋𝚕𝚒𝚌 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</a>
+    </div>
+
+    <div class="card mb-6">
+      <div class="card-title">✏️ 𝙴𝚍𝚒𝚝 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</div>
+      <form id="profileForm">
+        <div class="form-group">
+          <label class="form-label">📝 𝙱𝚒𝚘</label>
+          <textarea id="bio" class="form-textarea" rows="3" placeholder="𝚃𝚎𝚕𝚕 𝚘𝚝𝚑𝚎𝚛𝚜 𝚊𝚋𝚘𝚞𝚝 𝚢𝚘𝚞𝚛𝚜𝚎𝚕𝚏..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🌐 𝚆𝚎𝚋𝚜𝚒𝚝𝚎</label>
+          <input id="website" type="url" class="form-input" placeholder="𝚑𝚝𝚝𝚙𝚜://𝚢𝚘𝚞𝚛𝚠𝚎𝚋𝚜𝚒𝚝𝚎.𝚌𝚘𝚖">
+        </div>
+        <button type="submit" class="btn btn-primary" id="profileBtn">💾 𝚂𝚊𝚟𝚎 𝙿𝚛𝚘𝚏𝚒𝚕𝚎</button>
+      </form>
+    </div>
+
+
+    <div class="card mb-6">
+      <div class="card-title">🔑 𝙲𝚑𝚊𝚗𝚐𝚎 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</div>
+      <form id="passwordForm">
+        <div class="form-group">
+          <label class="form-label">𝙲𝚞𝚛𝚛𝚎𝚗𝚝 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</label>
+          <input id="oldPass" type="password" class="form-input" placeholder="𝚈𝚘𝚞𝚛 𝚌𝚞𝚛𝚛𝚎𝚗𝚝 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">𝙽𝚎𝚠 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</label>
+          <input id="newPass" type="password" class="form-input" placeholder="𝙰𝚝 𝚕𝚎𝚊𝚜𝚝 𝟼 𝚌𝚑𝚊𝚛𝚊𝚌𝚝𝚎𝚛𝚜" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">𝙲𝚘𝚗𝚏𝚒𝚛𝚖 𝙽𝚎𝚠 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</label>
+          <input id="confirmPass" type="password" class="form-input" placeholder="𝚁𝚎𝚙𝚎𝚊𝚝 𝚗𝚎𝚠 𝚙𝚊𝚜𝚜𝚠𝚘𝚛𝚍" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="passBtn">🔑 𝙲𝚑𝚊𝚗𝚐𝚎 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</button>
+      </form>
+    </div>
+
+    <div class="card" style="border-color:rgba(239,68,68,0.3);">
+      <button class="btn btn-danger" onclick="logout()">🚪 𝙻𝚘𝚐𝚘𝚞𝚝 𝚏𝚛𝚘𝚖 𝚝𝚑𝚒𝚜 𝚍𝚎𝚟𝚒𝚌𝚎</button>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+if (!requireAuth()) throw new Error('redirect');
+
+async function loadSettings() {
+  try {
+    const user = await api.get('/api/auth/me');
+    const localUser = getUser();
+    document.getElementById('settings-avatar').textContent = initials(user.username);
+    document.getElementById('s-username').textContent = '%' + user.username + '%';
+    document.getElementById('s-email').textContent = user.email;
+    document.getElementById('s-joined').textContent = fmtDate(user.created_at);
+    document.getElementById('bio').value = user.bio || '';
+    document.getElementById('website').value = user.website || '';
+    document.getElementById('my-profile-link').href = `/profile.html?user=${user.username}`;
+    localStorage.setItem('kni_user', JSON.stringify({...localUser, ...user}));
+  } catch(e) { toast(e.message,'error'); }
+
+  const key = getGroqKey();
+  const statusEl = document.getElementById('groq-key-status');
+  if (key) {
+    document.getElementById('groqKey').value = key;
+    statusEl.innerHTML = '<span style="color:var(--green);">✓ 𝙰𝙿𝙸 𝚔𝚎𝚢 𝚒𝚜 𝚜𝚎𝚝</span>';
+  } else {
+    statusEl.innerHTML = '<span style="color:var(--yellow);">⚠️ 𝙽𝚘 𝙰𝙿𝙸 𝚔𝚎𝚢 𝚜𝚎𝚝 — 𝚛𝚎𝚚𝚞𝚒𝚛𝚎𝚍 𝚏𝚘𝚛 𝙰𝙸 𝚐𝚎𝚗𝚎𝚛𝚊𝚝𝚒𝚘𝚗</span>';
+  }
+}
+
+document.getElementById('profileForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('profileBtn');
+  showLoading(btn,'Saving...');
+  try {
+    await api.put('/api/auth/profile', { bio: document.getElementById('bio').value, website: document.getElementById('website').value });
+    toast('Profile updated!','success');
+  } catch(err) { toast(err.message,'error'); }
+  hideLoading(btn);
+});
+
+document.getElementById('passwordForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const newPass = document.getElementById('newPass').value;
+  const confirm = document.getElementById('confirmPass').value;
+  if (newPass !== confirm) { toast('Passwords do not match','error'); return; }
+  const btn = document.getElementById('passBtn');
+  showLoading(btn,'Changing...');
+  try {
+    await api.put('/api/auth/password', { old_password: document.getElementById('oldPass').value, new_password: newPass });
+    toast('Password changed successfully!','success');
+    document.getElementById('passwordForm').reset();
+  } catch(err) { toast(err.message,'error'); }
+  hideLoading(btn);
+});
+
+
+document.addEventListener('DOMContentLoaded', loadSettings);
+</script>
+</body>
+</html>

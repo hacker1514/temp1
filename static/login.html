@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔰𝙽𝙸𝚁𝙰𝙽𝙹𝙰𝙽 𝙲𝚁𝙴𝙰𝚃𝙸𝙾𝙽𝚂🔰</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="bg-anim">
+    <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div id="toast-container"></div>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <img src="/logo.png" alt="KNI" onerror="this.style.display='none'">
+            <div style="margin-top:10px;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                𝙾𝚁𝙶𝙰𝙽𝙸𝚉𝙰𝚃𝙸𝙾𝙽
+            </div>
+        </div>
+
+        <div class="auth-title">𝚆𝚎𝚕𝚌𝚘𝚖𝚎 𝙱𝚊𝚌𝚔</div>
+
+        <div class="auth-sub">
+            𝚂𝚒𝚐𝚗 𝙸𝚗 𝚃𝚘 𝚈𝚘𝚞𝚛 𝙰𝚌𝚌𝚘𝚞𝚗𝚝 𝚃𝚘 𝙲𝚘𝚗𝚝𝚒𝚗𝚞𝚎
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label class="form-label">📧 𝙴𝚖𝚊𝚒𝚕</label>
+                <input
+                    id="email"
+                    type="email"
+                    class="form-input"
+                    placeholder="𝚢𝚘𝚞@𝚎𝚡𝚊𝚖𝚙𝚕𝚎.𝚌𝚘𝚖"
+                    required
+                    autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔑 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍</label>
+                <input
+                    id="password"
+                    type="password"
+                    class="form-input"
+                    placeholder="𝚈𝚘𝚞𝚛 𝙿𝚊𝚜𝚜𝚠𝚘𝚛𝚍"
+                    required
+                    autocomplete="current-password">
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary w-full btn-lg"
+                id="loginBtn">
+                🚀 𝚂𝚒𝚐𝚗 𝙸𝚗
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            𝙳𝚘𝚗'𝚝 𝙷𝚊𝚟𝚎 𝙰𝚗 𝙰𝚌𝚌𝚘𝚞𝚗𝚝?
+            <a href="/register.html">𝙲𝚛𝚎𝚊𝚝𝚎 𝙾𝚗𝚎 𝙵𝚛𝚎𝚎</a>
+        </div>
+
+        <div class="auth-footer" style="margin-top:8px;">
+            <a href="/" style="color:#64748b;font-size:.8rem;">
+                ← 𝙱𝚊𝚌𝚔 𝚃𝚘 𝙷𝚘𝚖𝚎
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+
+<script>
+redirectIfAuth();
+
+document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const btn = document.getElementById('loginBtn');
+    showLoading(btn, '𝚂𝚒𝚐𝚗𝚒𝚗𝚐 𝙸𝚗...');
+
+    try {
+        const res = await api.post('/api/auth/login', {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        });
+
+        setAuth(res.token, res.user);
+
+        toast('𝚆𝚎𝚕𝚌𝚘𝚖𝚎 𝙱𝚊𝚌𝚔, ' + res.user.username + '!', 'success');
+
+        setTimeout(() => {
+            window.location.href = '/dashboard.html';
+        }, 800);
+
+    } catch (err) {
+        toast(err.message, 'error');
+        hideLoading(btn);
+    }
+});
+</script>
+
+</body>
+</html>

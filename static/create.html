@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔰𝙽𝙸𝚁𝙰𝙽𝙹𝙰𝙽 𝙲𝚁𝙴𝙰𝚃𝙸𝙾𝙽𝚂🔰</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.create-layout { display:grid; grid-template-columns:1fr 420px; gap:24px; }
+@media(max-width:900px){ .create-layout { grid-template-columns:1fr; } }
+.panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+.panel-title { font-size:1rem; font-weight:700; color:var(--txt); margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+.groq-status { display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:var(--radius-sm); font-size:.8rem; margin-bottom:16px; }
+.groq-ok { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:var(--green); }
+.groq-warn { background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.2); color:var(--yellow); }
+.file-tabs { display:flex; gap:4px; margin-bottom:12px; }
+.file-tab { padding:6px 14px; border-radius:6px; font-size:.8rem; font-weight:600; cursor:pointer; background:var(--card); border:1px solid var(--border); color:var(--txt2); transition:var(--transition); }
+.file-tab.active { background:rgba(249,115,22,0.15); border-color:rgba(249,115,22,0.4); color:var(--orange); }
+.response-area { background:rgba(0,0,0,0.35); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; font-family:'Courier New',monospace; font-size:.8rem; color:#e2e8f0; min-height:200px; max-height:350px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="bg-anim"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="KNI" onerror="this.style.display='none'"><span>𝙾𝚁𝙶𝙰𝙽𝙸𝚉𝙰𝚃𝙸𝙾𝙽</span></a>
+  <div class="nav-links">
+    <a href="/dashboard.html">𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+    <a href="/create.html" class="active">+ 𝙲𝚛𝚎𝚊𝚝𝚎</a>
+    <a href="/browse.html">𝙱𝚛𝚘𝚠𝚜𝚎</a>
+  </div>
+  <div class="nav-actions">
+    <div id="nav-guest" class="hidden"><a href="/login.html" class="btn btn-ghost btn-sm">𝙻𝚘𝚐𝚒𝚗</a></div>
+    <div id="nav-auth" class="hidden dropdown-menu">
+      <div class="avatar-sm" id="nav-avatar">?</div>
+      <div class="dropdown-content">
+        <a href="/dashboard.html">🏠 𝙳𝚊𝚜𝚑𝚋𝚘𝚊𝚛𝚍</a>
+        <a href="/settings.html">⚙️ 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+        <hr><a href="#" onclick="logout()">🚪 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">𝙽𝚊𝚟𝚒𝚐𝚊𝚝𝚒𝚘𝚗</div>
+    <a href="/dashboard.html"><span class="icon">🏠</span> 𝙼𝚢 𝙿𝚛𝚘𝚓𝚎𝚌𝚝𝚜</a>
+    <a href="/create.html" class="active"><span class="icon">➕</span> 𝙲𝚛𝚎𝚊𝚝𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</a>
+    <a href="/browse.html"><span class="icon">🔍</span> 𝙱𝚛𝚘𝚠𝚜𝚎 𝙿𝚞𝚋𝚕𝚒𝚌</a>
+    <div class="sidebar-label">𝙰𝚌𝚌𝚘𝚞𝚗𝚝</div>
+    <a href="/settings.html"><span class="icon">⚙️</span> 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a>
+    <a href="#" onclick="logout()"><span class="icon">🚪</span> 𝙻𝚘𝚐𝚘𝚞𝚝</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="page-title" id="page-title">🧩 𝙲𝚛𝚎𝚊𝚝𝚎 𝙽𝚎𝚠 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</div>
+      <div class="page-sub" id="page-sub">𝙵𝚒𝚕𝚕 𝚒𝚗 𝚝𝚑𝚎 𝚍𝚎𝚝𝚊𝚒𝚕𝚜 𝚊𝚗𝚍 𝚞𝚜𝚎 𝙰𝙸 𝚝𝚘 𝚐𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚢𝚘𝚞𝚛 𝙱𝚛𝚘𝚠𝚜𝚎𝚛 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗</div>
+    </div>
+
+    <div class="create-layout">
+      <div>
+        <div class="panel mb-6">
+          <div class="panel-title">📂 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝙸𝚗𝚏𝚘</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">📝 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝙽𝚊𝚖𝚎 *</label>
+              <input id="extName" class="form-input" placeholder="𝙼𝚢 𝙰𝚠𝚎𝚜𝚘𝚖𝚎 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">🏷️ 𝚅𝚎𝚛𝚜𝚒𝚘𝚗</label>
+              <input id="extVersion" class="form-input" value="1.0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">📖 𝙳𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗</label>
+            <textarea id="extDesc" class="form-textarea" rows="2" placeholder="𝙳𝚎𝚜𝚌𝚛𝚒𝚋𝚎 𝚠𝚑𝚊𝚝 𝚢𝚘𝚞𝚛 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚍𝚘𝚎𝚜..."></textarea>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">👨‍💻 𝙰𝚞𝚝𝚑𝚘𝚛</label>
+              <input id="extAuthor" class="form-input" placeholder="𝚈𝚘𝚞𝚛 𝚗𝚊𝚖𝚎">
+            </div>
+            <div class="form-group">
+              <label class="form-label">🌐 𝚆𝚎𝚋𝚜𝚒𝚝𝚎</label>
+              <input id="extWebsite" class="form-input" type="url" placeholder="𝚑𝚝𝚝𝚙𝚜://...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🏷️ 𝚃𝚊𝚐𝚜 (𝚌𝚘𝚖𝚖𝚊 𝚜𝚎𝚙𝚊𝚛𝚊𝚝𝚎𝚍)</label>
+            <input id="extTags" class="form-input" placeholder="𝚙𝚛𝚘𝚍𝚞𝚌𝚝𝚒𝚟𝚒𝚝𝚢, 𝚍𝚊𝚛𝚔-𝚖𝚘𝚍𝚎, 𝚝𝚊𝚋-𝚖𝚊𝚗𝚊𝚐𝚎𝚛">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🖼️ 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝙸𝚌𝚘𝚗</label>
+            <input id="extIcon" type="file" class="form-input" accept=".png,.jpg,.jpeg,.svg,.gif">
+          </div>
+        </div>
+
+        <div class="panel mb-6">
+          <div class="panel-title">🤖 𝙰𝙸 𝙿𝚛𝚘𝚖𝚙𝚝 </div>
+          <div class="form-group">
+            <label class="form-label">𝙳𝚎𝚜𝚌𝚛𝚒𝚋𝚎 𝚢𝚘𝚞𝚛 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚒𝚗 𝚍𝚎𝚝𝚊𝚒𝚕</label>
+            <textarea id="prompt" class="form-textarea" rows="8" placeholder="𝙴𝚡𝚊𝚖𝚙𝚕𝚎: 𝙲𝚛𝚎𝚊𝚝𝚎 𝚊 𝙱𝚛𝚘𝚠𝚜𝚎𝚛 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚝𝚑𝚊𝚝 𝚊𝚞𝚝𝚘𝚖𝚊𝚝𝚒𝚌𝚊𝚕𝚕𝚢 𝚑𝚒𝚍𝚎𝚜 𝚈𝚘𝚞𝚃𝚞𝚋𝚎 𝚛𝚎𝚌𝚘𝚖𝚖𝚎𝚗𝚍𝚎𝚍 𝚟𝚒𝚍𝚎𝚘𝚜 𝚊𝚗𝚍 𝚝𝚑𝚎 𝚜𝚒𝚍𝚎𝚋𝚊𝚛. 𝚆𝚑𝚎𝚗 𝚝𝚑𝚎 𝚞𝚜𝚎𝚛 𝚌𝚕𝚒𝚌𝚔𝚜 𝚝𝚑𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚒𝚌𝚘𝚗, 𝚒𝚝 𝚜𝚑𝚘𝚠𝚜 𝚊 𝚝𝚘𝚐𝚐𝚕𝚎 𝚝𝚘 𝚎𝚗𝚊𝚋𝚕𝚎/𝚍𝚒𝚜𝚊𝚋𝚕𝚎 𝚝𝚑𝚎 𝚑𝚒𝚍𝚒𝚗𝚐. 𝙰𝚕𝚜𝚘 𝚊𝚍𝚍 𝚊 𝚔𝚎𝚢𝚋𝚘𝚊𝚛𝚍 𝚜𝚑𝚘𝚛𝚝𝚌𝚞𝚝 𝙲𝚝𝚛𝚕+𝚂𝚑𝚒𝚏𝚝+𝙷 𝚝𝚘 𝚝𝚘𝚐𝚐𝚕𝚎 𝚒𝚝."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" id="generateBtn">🚀 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚠𝚒𝚝𝚑 𝙰𝙸</button>
+            <button class="btn btn-secondary" id="saveBtn" disabled>💾 𝚂𝚊𝚟𝚎 𝚝𝚘 𝚂𝚎𝚛𝚟𝚎𝚛</button>
+            <button class="btn btn-ghost" id="clearBtn">🧹 𝙲𝚕𝚎𝚊𝚛</button>
+          </div>
+        </div>
+
+        <div class="panel mb-6" id="progressPanel" style="display:none;">
+          <div class="panel-title">⚡ 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚒𝚘𝚗 𝚂𝚝𝚊𝚝𝚞𝚜</div>
+          <div class="progress-track"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+          <div id="statusText" style="font-size:.875rem;color:var(--txt2);margin-top:8px;"></div>
+        </div>
+
+        <div class="panel mb-6" id="responsePanel" style="display:none;">
+          <div class="panel-title">📜 𝙰𝙸 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎</div>
+          <div class="response-area" id="responseBox">𝚆𝚊𝚒𝚝𝚒𝚗𝚐 𝚏𝚘𝚛 𝙰𝙸...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel mb-6" id="filesPreviewPanel">
+          <div class="panel-title">📂 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎𝚍 𝙵𝚒𝚕𝚎𝚜</div>
+          <div class="file-tabs">
+            <div class="file-tab active" onclick="showFileTab('manifest')">📋 𝚖𝚊𝚗𝚒𝚏𝚎𝚜𝚝.𝚓𝚜𝚘𝚗</div>
+            <div class="file-tab" onclick="showFileTab('inject')">📜 𝚒𝚗𝚓𝚎𝚌𝚝.𝚓𝚜</div>
+          </div>
+          <div id="tab-manifest" class="response-area">// 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚝𝚘 𝚜𝚎𝚎 𝚖𝚊𝚗𝚒𝚏𝚎𝚜𝚝.𝚓𝚜𝚘𝚗</div>
+          <div id="tab-inject" class="response-area" style="display:none;">// 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚝𝚘 𝚜𝚎𝚎 𝚒𝚗𝚓𝚎𝚌𝚝.𝚓𝚜</div>
+        </div>
+
+        <div class="panel mb-6" id="existingFilesPanel" style="display:none;">
+          <div class="panel-title">📁 𝚂𝚎𝚛𝚟𝚎𝚛 𝙵𝚒𝚕𝚎𝚜</div>
+          <ul class="file-list" id="serverFileList"></ul>
+          <button class="btn btn-ghost btn-sm mt-4 w-full" onclick="loadProjectFiles()">🔄 𝚁𝚎𝚏𝚛𝚎𝚜𝚑</button>
+        </div>
+
+        <div class="panel" id="projectActionsPanel" style="display:none;">
+          <div class="panel-title">⚙️ 𝙿𝚛𝚘𝚓𝚎𝚌𝚝 𝙰𝚌𝚝𝚒𝚘𝚗𝚜</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-success w-full" id="publishBtn" onclick="handlePublish()">🌍 𝙿𝚞𝚋𝚕𝚒𝚜𝚑</button>
+            <button id="downloadBtn" class="btn btn-secondary w-full" onclick="downloadProject()">📁 𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝙵𝚘𝚕𝚍𝚎𝚛</button>
+            <a id="viewPublicBtn" class="btn btn-ghost w-full" href="#" style="display:none;">🔗 𝚅𝚒𝚎𝚠 𝙿𝚞𝚋𝚕𝚒𝚌 𝙿𝚊𝚐𝚎</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+if (!requireAuth()) throw new Error('redirect');
+
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
+let aiResponse = '', manifestContent = '', injectContent = '';
+let currentProjectId = null;
+let isPublished = false;
+let iconFilename = '';
+
+function buildManifest() {
+  const manifest = {
+    manifest_version: 3,
+    name: document.getElementById('extName').value.trim(),
+    version: document.getElementById('extVersion').value || '1.0',
+    description: document.getElementById('extDesc').value || '',
+    author: document.getElementById('extAuthor').value || '',
+    content_scripts: [{ matches: ['<all_urls>'], js: ['inject.js'] }]
+  };
+  const icon = iconFilename || document.getElementById('extIcon').files[0]?.name;
+  if (icon) manifest.action = { default_icon: { '128': icon } };
+  return JSON.stringify(manifest, null, 2);
+}
+
+function refreshManifestPreview() {
+  manifestContent = buildManifest();
+  document.getElementById('tab-manifest').textContent = manifestContent;
+}
+
+function getParams() {
+  const p = new URLSearchParams(location.search);
+  return { id: p.get('id') };
+}
+
+function setProgress(val, text) {
+  document.getElementById('progressPanel').style.display = 'block';
+  document.getElementById('progressBar').style.width = val + '%';
+  if (text) document.getElementById('statusText').textContent = text;
+}
+
+function showFileTab(tab) {
+  document.querySelectorAll('.file-tab').forEach((t,i) => t.classList.toggle('active', (i===0 && tab==='manifest') || (i===1 && tab==='inject')));
+  document.getElementById('tab-manifest').style.display = tab==='manifest' ? 'block' : 'none';
+  document.getElementById('tab-inject').style.display = tab==='inject' ? 'block' : 'none';
+}
+
+function updateGroqStatus() {
+  const key = getGroqKey();
+  const bar = document.getElementById('groq-status-bar');
+  if (key) {
+    bar.innerHTML = `<div class="groq-status groq-ok">✓ 𝙶𝚛𝚘𝚚 𝙰𝙿𝙸 𝚔𝚎𝚢 𝚌𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚎𝚍</div>`;
+  } else {
+    bar.innerHTML = `<div class="groq-status groq-warn">⚠️ 𝙽𝚘 𝙶𝚛𝚘𝚚 𝙰𝙿𝙸 𝚔𝚎𝚢. <a href="/settings.html" style="color:var(--yellow);">𝚂𝚎𝚝 𝚒𝚝 𝚒𝚗 𝚂𝚎𝚝𝚝𝚒𝚗𝚐𝚜</a></div>`;
+  }
+}
+
+async function generateExtension() {
+  const name = document.getElementById('extName').value.trim();
+  const pr = document.getElementById('prompt').value.trim();
+  if (!name) { toast('Enter extension name', 'error'); return; }
+  if (!pr) { toast('Enter a prompt', 'error'); return; }
+  const apiKey = getGroqKey();
+  if (!apiKey) { toast('Set your Groq API key in Settings first', 'error'); setTimeout(()=>window.location.href='/settings.html',1500); return; }
+
+  const btn = document.getElementById('generateBtn');
+  showLoading(btn, 'Generating...');
+  document.getElementById('responsePanel').style.display = 'block';
+  document.getElementById('responseBox').textContent = '🤖 𝙲𝚊𝚕𝚕𝚒𝚗𝚐 𝙶𝚛𝚘𝚚 𝙰𝙸...';
+  setProgress(15, '📡 𝙲𝚘𝚗𝚗𝚎𝚌𝚝𝚒𝚗𝚐 𝚝𝚘 𝙶𝚛𝚘𝚚 𝙰𝙸...');
+
+  try {
+    setProgress(35, '🤖 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚒𝚗𝚐 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚌𝚘𝚍𝚎...');
+    const systemMsg = 'You are a Chrome Extension generator. Return ONLY one code block: inject.js. No explanation. No markdown outside code blocks.';
+    const userMsg = `Create a Chrome extension content script:\nName: ${name}\nVersion: ${document.getElementById('extVersion').value||'1.0'}\nDescription: ${document.getElementById('extDesc').value}\nAuthor: ${document.getElementById('extAuthor').value}\n\nUser Request:\n${pr}\n\nReturn the full working inject.js code inside one \`\`\`inject.js code block. Do not return placeholder or example code.`;
+
+    const res = await fetch(GROQ_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+      body:JSON.stringify({model:GROQ_MODEL,temperature:0.2,max_tokens:8000,
+        messages:[{role:'system',content:systemMsg},{role:'user',content:userMsg}]})
+    });
+    if(!res.ok) throw new Error('Groq API error: ' + res.status);
+    const data = await res.json();
+    aiResponse = data.choices[0].message.content;
+    document.getElementById('responseBox').textContent = aiResponse;
+    setProgress(70, '📄 𝙴𝚡𝚝𝚛𝚊𝚌𝚝𝚒𝚗𝚐 𝚏𝚒𝚕𝚎𝚜...');
+
+    injectContent = extractBlock(aiResponse, 'inject.js');
+    if (isPlaceholderInject(injectContent)) {
+      const alt = extractBlock(aiResponse, 'javascript') || extractBlock(aiResponse, 'js');
+      if (!isPlaceholderInject(alt)) injectContent = alt;
+    }
+    if (isPlaceholderInject(injectContent)) {
+      const plain = aiResponse.replace(/```[\s\S]*?```/g, '').trim();
+      if (plain.length > 20 && !plain.trimStart().startsWith('{')) injectContent = plain;
+    }
+    if (isPlaceholderInject(injectContent)) injectContent = 'console.log("AI extension loaded");';
+    manifestContent = buildManifest();
+
+    document.getElementById('tab-manifest').textContent = manifestContent;
+    document.getElementById('tab-inject').textContent = injectContent;
+    setProgress(100, '✅ 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚒𝚘𝚗 𝚌𝚘𝚖𝚙𝚕𝚎𝚝𝚎!');
+    document.getElementById('saveBtn').disabled = false;
+    toast('Extension generated successfully!', 'success');
+  } catch(e) {
+    toast(e.message, 'error');
+    setProgress(0, '❌ 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚒𝚘𝚗 𝚏𝚊𝚒𝚕𝚎𝚍');
+    document.getElementById('responseBox').textContent = '❌ ' + e.message;
+  }
+  hideLoading(btn);
+}
+
+async function saveToServer() {
+  const name = document.getElementById('extName').value.trim();
+  if (!name) { toast('Enter extension name', 'error'); return; }
+  const btn = document.getElementById('saveBtn');
+  showLoading(btn, ' 𝚂𝚊𝚟𝚒𝚗𝚐 𝚝𝚘 𝚜𝚎𝚛𝚟𝚎𝚛');
+  setProgress(50, '💾 𝚂𝚊𝚟𝚒𝚗𝚐 𝚝𝚘 𝚜𝚎𝚛𝚟𝚎𝚛...');
+  try {
+    let pid = currentProjectId;
+    if (!pid) {
+      const proj = await api.post('/api/projects', {
+        name, version: document.getElementById('extVersion').value||'1.0',
+        description: document.getElementById('extDesc').value||'',
+        author: document.getElementById('extAuthor').value||'',
+        website: document.getElementById('extWebsite').value||'',
+        tags: document.getElementById('extTags').value||''
+      });
+      pid = proj.id;
+      currentProjectId = pid;
+    } else {
+      await api.put(`/api/projects/${pid}`, {
+        name, version: document.getElementById('extVersion').value||'1.0',
+        description: document.getElementById('extDesc').value||'',
+        author: document.getElementById('extAuthor').value||'',
+        website: document.getElementById('extWebsite').value||'',
+        tags: document.getElementById('extTags').value||''
+      });
+    }
+    syncContentFromTabs();
+    await saveInjectFiles(pid);
+    const iconFile = document.getElementById('extIcon').files[0];
+    if (iconFile) {
+      const fd = new FormData(); fd.append('file', iconFile);
+      await api.upload(`/api/projects/${pid}/upload-icon`, fd);
+      iconFilename = iconFile.name;
+    }
+    setProgress(100, '✅ 𝚂𝚊𝚟𝚎𝚍 𝚝𝚘 𝚜𝚎𝚛𝚟𝚎𝚛!');
+    document.getElementById('existingFilesPanel').style.display = 'block';
+    document.getElementById('projectActionsPanel').style.display = 'block';
+    await loadProjectFiles();
+    updatePublishBtn();
+    toast('Extension saved to server!', 'success');
+    history.replaceState(null,'',`/create.html?id=${pid}`);
+  } catch(e) { toast(e.message,'error'); setProgress(0,'❌ 𝚂𝚊𝚟𝚎 𝚏𝚊𝚒𝚕𝚎𝚍'); }
+  hideLoading(btn);
+}
+
+async function loadProjectFiles() {
+  if (!currentProjectId) return;
+  try {
+    const files = await api.get(`/api/projects/${currentProjectId}/files`);
+    const ul = document.getElementById('serverFileList');
+    if (!files.length) { ul.innerHTML = '<li style="color:var(--txt2);font-size:.82rem;padding:8px;">𝙽𝚘 𝚏𝚒𝚕𝚎𝚜 𝚜𝚊𝚟𝚎𝚍 𝚢𝚎𝚝</li>'; return; }
+    ul.innerHTML = files.map(f => `<li class="file-item" onclick="previewFile('${f.name}')">
+      <div class="file-item-left"><span class="file-icon">${fileIcon(f.name)}</span><div><div class="file-name">${f.name}</div><div class="file-size">${fmtSize(f.size)}</div></div></div>
+    </li>`).join('');
+  } catch(e) {}
+}
+
+async function previewFile(name) {
+  if (!currentProjectId) return;
+  try {
+    const f = await api.get(`/api/projects/${currentProjectId}/file/${name}`);
+    if (name.endsWith('.json')) {
+      document.getElementById('tab-manifest').textContent = f.content;
+      showFileTab('manifest');
+    } else {
+      document.getElementById('tab-inject').textContent = f.content;
+      showFileTab('inject');
+    }
+    document.getElementById('responsePanel').style.display = 'block';
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function loadExistingProject(id) {
+  try {
+    const proj = await api.get(`/api/projects/${id}`);
+    currentProjectId = proj.id;
+    isPublished = !!proj.is_published;
+    iconFilename = proj.icon_filename || '';
+    document.getElementById('extName').value = proj.name;
+    document.getElementById('extVersion').value = proj.version;
+    document.getElementById('extDesc').value = proj.description||'';
+    document.getElementById('extAuthor').value = proj.author||'';
+    document.getElementById('extWebsite').value = proj.website||'';
+    document.getElementById('extTags').value = proj.tags||'';
+    document.getElementById('page-title').textContent = '✏️ 𝙴𝚍𝚒𝚝 𝙴𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗';
+    document.getElementById('page-sub').textContent = proj.name + ' · ' + proj.folder_name;
+    document.getElementById('saveBtn').disabled = false;
+    document.getElementById('existingFilesPanel').style.display = 'block';
+    document.getElementById('projectActionsPanel').style.display = 'block';
+    updatePublishBtn();
+    if (isPublished) {
+      document.getElementById('viewPublicBtn').style.display = 'flex';
+      document.getElementById('viewPublicBtn').href = `/project.html?id=${id}`;
+    }
+    try {
+      const inj = await api.get(`/api/projects/${id}/file/inject.js`);
+      injectContent = inj.content;
+      document.getElementById('tab-inject').textContent = injectContent;
+      document.getElementById('responsePanel').style.display = 'block';
+    } catch {}
+    try {
+      const man = await api.get(`/api/projects/${id}/file/manifest.json`);
+      manifestContent = man.content;
+      document.getElementById('tab-manifest').textContent = manifestContent;
+      document.getElementById('responsePanel').style.display = 'block';
+    } catch { refreshManifestPreview(); }
+    await loadProjectFiles();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function handlePublish() {
+  if (!currentProjectId) return;
+  try {
+    if (isPublished) {
+      await api.post(`/api/projects/${currentProjectId}/unpublish`);
+      isPublished = false;
+      toast('Extension unpublished','info');
+    } else {
+      await api.post(`/api/projects/${currentProjectId}/publish`);
+      isPublished = true;
+      toast('Extension published!','success');
+      document.getElementById('viewPublicBtn').style.display = 'flex';
+      document.getElementById('viewPublicBtn').href = `/project.html?id=${currentProjectId}`;
+    }
+    updatePublishBtn();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function updatePublishBtn() {
+  const btn = document.getElementById('publishBtn');
+  if (btn) btn.textContent = isPublished ? '🔒 𝚄𝚗𝚙𝚞𝚋𝚕𝚒𝚜𝚑' : '🌍 𝙿𝚞𝚋𝚕𝚒𝚜𝚑';
+  btn.className = isPublished ? 'btn btn-secondary w-full' : 'btn btn-success w-full';
+}
+
+function isTabPlaceholder(text) {
+  const t = (text || '').trim();
+  return !t || /^\/\/\s*(𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎|Generate)/i.test(t);
+}
+
+function isPlaceholderInject(code) {
+  const c = (code || '').trim();
+  if (!c || isTabPlaceholder(c)) return true;
+  return c === 'console.log("loaded");' || c === 'console.log("AI extension loaded");';
+}
+
+function getInjectFromTab() {
+  const inject = document.getElementById('tab-inject').textContent;
+  if (!isTabPlaceholder(inject)) return inject;
+  return injectContent || '';
+}
+
+function syncContentFromTabs() {
+  const inject = getInjectFromTab();
+  if (inject.trim()) injectContent = inject;
+  const manifest = document.getElementById('tab-manifest').textContent;
+  if (!isTabPlaceholder(manifest)) manifestContent = manifest;
+  else if (injectContent) manifestContent = buildManifest();
+}
+
+async function saveInjectFiles(pid) {
+  syncContentFromTabs();
+  const inject = getInjectFromTab();
+  if (!inject.trim()) return;
+  await api.post(`/api/projects/${pid}/generate`, {
+    manifest_content: manifestContent || buildManifest(),
+    inject_content: inject
+  });
+  injectContent = inject;
+  manifestContent = manifestContent || buildManifest();
+}
+
+async function downloadProject() {
+  if (!currentProjectId) { toast('Save project first', 'error'); return; }
+  try {
+    await saveInjectFiles(currentProjectId);
+    const name = document.getElementById('extName').value.trim() || 'extension';
+    await api.download(`/api/projects/${currentProjectId}/download`, name);
+    toast('𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚜𝚝𝚊𝚛𝚝𝚎𝚍!', 'success');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast(e.message, 'error');
+  }
+}
+
+document.getElementById('generateBtn').addEventListener('click', generateExtension);
+document.getElementById('saveBtn').addEventListener('click', saveToServer);
+document.getElementById('extIcon').addEventListener('change', (e) => {
+  iconFilename = e.target.files[0]?.name || '';
+  if (injectContent) refreshManifestPreview();
+});
+['extName','extVersion','extDesc','extAuthor'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    if (injectContent) refreshManifestPreview();
+  });
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('extName').value = '';
+  document.getElementById('prompt').value = '';
+  document.getElementById('extDesc').value = '';
+  aiResponse = ''; manifestContent = ''; injectContent = ''; iconFilename = '';
+  document.getElementById('responsePanel').style.display = 'none';
+  document.getElementById('progressPanel').style.display = 'none';
+  document.getElementById('tab-manifest').textContent = '// 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚝𝚘 𝚜𝚎𝚎 𝚖𝚊𝚗𝚒𝚏𝚎𝚜𝚝.𝚓𝚜𝚘𝚗';
+  document.getElementById('tab-inject').textContent = '// 𝙶𝚎𝚗𝚎𝚛𝚊𝚝𝚎 𝚎𝚡𝚝𝚎𝚗𝚜𝚒𝚘𝚗 𝚝𝚘 𝚜𝚎𝚎 𝚒𝚗𝚓𝚎𝚌𝚝.𝚓𝚜';
+  document.getElementById('saveBtn').disabled = true;
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateGroqStatus();
+  const user = getUser();
+  if (user) { document.getElementById('extAuthor').value = document.getElementById('extAuthor').value || user.username; }
+  const { id } = getParams();
+  if (id) loadExistingProject(id);
+});
+</script>
+</body>
+</html>
