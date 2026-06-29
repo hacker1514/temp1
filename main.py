@@ -13,15 +13,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-
-@app.get("/api/settings/key")
-async def get_api_key(user=Depends(get_current_user)):
-    # Replace "GROQ_API_KEY" with the actual name of your Railway variable
-    api_key = os.getenv("api") 
-    if not api_key:
-        raise HTTPException(status_code=404, detail="API Key not configured")
-    return {"key": api_key}
-
 from database import (
     init_db, get_db, hash_password, verify_password,
     create_session, get_user_by_token, get_project_folder,
@@ -39,6 +30,20 @@ app.add_middleware(
 )
 
 init_db()
+
+# ... (Keep all your existing imports and setup code)
+
+# ── NEW SECURE API KEY ENDPOINT ───────────────────────────────────────────────
+
+@app.get("/api/config/key")
+async def get_groq_key(user=Depends(get_current_user)):
+    # Retrieves the variable 'api' from your Railway environment
+    api_key = os.getenv("api")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="API key not configured on server")
+    return {"key": api_key}
+
+# ... (Keep all your existing routes, logic, and main block below this)
 
 
 def build_manifest(row: dict) -> str:
@@ -776,6 +781,7 @@ async def health():
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 os.makedirs(static_dir, exist_ok=True)
 app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
+
 
 
 if __name__ == "__main__":
