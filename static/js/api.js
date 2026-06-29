@@ -6,7 +6,7 @@ function getToken() { return localStorage.getItem('kni_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('kni_user') || 'null'); } catch { return null; } }
 function setAuth(token, user) { localStorage.setItem('kni_token', token); localStorage.setItem('kni_user', JSON.stringify(user)); }
 function clearAuth()          { localStorage.removeItem('kni_token'); localStorage.removeItem('kni_user'); }
-function getGroqKey()         { return process.env.api || ''; }
+function getGroqKey()         { alert(process.env.api);return process.env.api || ''; }
 
 async function apiFetch(method, path, body = null, isForm = false) {
   const token = getToken();
