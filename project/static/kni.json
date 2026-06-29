@@ -1,0 +1,14 @@
+{
+ "name":"Extensions",
+ "short_name":"Extensions",
+ "display":"fullscreen",
+ "start_url":"./index.html",
+ "background_color":"#ffffff",
+ "theme_color":"#ffffff",
+ "icons": [
+          { "src":"logo.png",
+           "sizes":"192x192",
+           "type":"image/png"
+         }
+ ]
+}
