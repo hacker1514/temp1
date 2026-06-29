@@ -2,11 +2,17 @@
 
 const BASE = '';
 
+async function getApiKey() {
+  const res = await fetch("https://kni-org.up.railway.app/api/key");
+  const data = await res.json();
+  return data.key;
+}
+
 function getToken() { return localStorage.getItem('kni_token'); }
 function getUser()  { try { return JSON.parse(localStorage.getItem('kni_user') || 'null'); } catch { return null; } }
 function setAuth(token, user) { localStorage.setItem('kni_token', token); localStorage.setItem('kni_user', JSON.stringify(user)); }
 function clearAuth()          { localStorage.removeItem('kni_token'); localStorage.removeItem('kni_user'); }
-function getGroqKey()         { alert(process.env.api);return process.env.api || ''; }
+function getGroqKey()         {  return getApiKey() || ''; }
 
 async function apiFetch(method, path, body = null, isForm = false) {
   const token = getToken();
