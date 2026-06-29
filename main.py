@@ -14,14 +14,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
-from fastapi import FastAPI
-import os
-
-app = FastAPI()
-
-@app.get("/api/key")
-def get_key():
-    return {"key": os.getenv("api")}
+@app.get("/api/settings/key")
+async def get_api_key(user=Depends(get_current_user)):
+    # Replace "GROQ_API_KEY" with the actual name of your Railway variable
+    api_key = os.getenv("api") 
+    if not api_key:
+        raise HTTPException(status_code=404, detail="API Key not configured")
+    return {"key": api_key}
 
 from database import (
     init_db, get_db, hash_password, verify_password,
