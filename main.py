@@ -31,21 +31,6 @@ app.add_middleware(
 
 init_db()
 
-# ... (Keep all your existing imports and setup code)
-
-# ── NEW SECURE API KEY ENDPOINT ───────────────────────────────────────────────
-
-@app.get("/api/config/key")
-async def get_groq_key(user=Depends(get_current_user)):
-    # Retrieves the variable 'api' from your Railway environment
-    api_key = os.getenv("api")
-    if not api_key:
-        raise HTTPException(status_code=500, detail="API key not configured on server")
-    return {"key": api_key}
-
-# ... (Keep all your existing routes, logic, and main block below this)
-
-
 def build_manifest(row: dict) -> str:
     manifest = {
         "manifest_version": 3,
@@ -123,6 +108,14 @@ async def get_optional_user(authorization: str = Header(None)):
 
 
 # ── Pydantic models ────────────────────────────────────────────────────────────
+
+
+@app.get("/api/config/key")
+async def get_groq_key(user=Depends(get_current_user)):
+    api_key = os.getenv("api")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="API key not configured on server")
+    return {"key": api_key}
 
 class RegisterModel(BaseModel):
     username: str
