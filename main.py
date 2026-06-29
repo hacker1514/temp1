@@ -13,6 +13,16 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+
+from fastapi import FastAPI
+import os
+
+app = FastAPI()
+
+@app.get("/api/key")
+def get_key():
+    return {"key": os.getenv("api")}
+
 from database import (
     init_db, get_db, hash_password, verify_password,
     create_session, get_user_by_token, get_project_folder,
